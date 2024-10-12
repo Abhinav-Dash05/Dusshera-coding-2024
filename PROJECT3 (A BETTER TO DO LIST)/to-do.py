@@ -6,7 +6,6 @@ HIGH_PRIORITY = []
 LOW_PRIORITY = []
 fixed_operator = "|"
 
-
 def load_tasks_from_file():
     try:
         with open('list.txt', 'r') as file:
@@ -28,8 +27,9 @@ def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def wait_and_clear():
-    time.sleep(10)
+    time.sleep(5)  # Changed from 10 to 5 seconds
     clear_terminal()
+
 print("Do you want to load any previously stored lists")
 print("Press 1 for yes")
 print("Press 2 for no")
@@ -39,7 +39,7 @@ load = int(input())
 if load == 1:
     load_tasks_from_file()
 elif load == 2:
-    print("OKAY STARTTING WITH AN EMPTY LIST")
+    print("OKAY STARTING WITH AN EMPTY LIST")
 print("---------------------------------------------------------------------------------------------")
 
 while True:
@@ -61,7 +61,7 @@ while True:
         
         TASK = input("Enter task to be added: ")
         DATE = input("When is the final date of Completion: ")
-        TIME = input("What is the submission time: ")
+        TIME = input("What is the Completion time: ")
         
         TASK_DETAILS = f"{TASK}{fixed_operator}{DATE}{fixed_operator}{TIME}"
         
@@ -74,6 +74,8 @@ while True:
         else:
             print("Not a valid option.")
         print("---------------------------------------------------------------------------------------------")
+        
+        wait_and_clear()
         
     elif user_input_1 == "2":
         print("DO YOU WANT TO SEE YOUR HIGH PRIORITY LIST OR LOW PRIORITY LIST")
@@ -94,6 +96,8 @@ while True:
         else:
             print("Not a valid Command.")
         print("---------------------------------------------------------------------------------------------")
+        
+        wait_and_clear()
         
     elif user_input_1 == "3":
         print("DO you want to delete task from high priority list or low priority list.")
@@ -141,6 +145,8 @@ while True:
             print("Not a valid command.")
         print("---------------------------------------------------------------------------------------------")
 
+        wait_and_clear()
+
     elif user_input_1 == "4":
         print("Which list do you want to clear?")
         print("Press 1 for HIGH PRIORITY LIST")
@@ -160,6 +166,8 @@ while True:
             LOW_PRIORITY.clear()
         print("---------------------------------------------------------------------------------------------")
         
+        wait_and_clear()
+
     elif user_input_1 == "5":
         print("You sure that you want to exit? Just making sure of no possible accidents.")
         print("Press 1 for yes.")
