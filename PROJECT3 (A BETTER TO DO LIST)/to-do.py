@@ -6,6 +6,7 @@ HIGH_PRIORITY = []
 LOW_PRIORITY = []
 fixed_operator = "|"
 
+
 def load_tasks_from_file():
     try:
         with open('list.txt', 'r') as file:
@@ -29,8 +30,17 @@ def clear_terminal():
 def wait_and_clear():
     time.sleep(10)
     clear_terminal()
+print("Do you want to load any previously stored lists")
+print("Press 1 for yes")
+print("Press 2 for no")
 
-load_tasks_from_file()
+load = int(input())
+
+if load == 1:
+    load_tasks_from_file()
+elif load == 2:
+    print("OKAY STARTTING WITH AN EMPTY LIST")
+print("---------------------------------------------------------------------------------------------")
 
 while True:
     print("What do you want me to do.")
