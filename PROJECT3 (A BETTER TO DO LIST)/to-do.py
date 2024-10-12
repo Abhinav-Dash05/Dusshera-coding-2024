@@ -60,7 +60,7 @@ while True:
         C1 = int(input())
         
         TASK = input("Enter task to be added: ")
-        DATE = input("When is the final date of submission: ")
+        DATE = input("When is the final date of Completion: ")
         TIME = input("What is the submission time: ")
         
         TASK_DETAILS = f"{TASK}{fixed_operator}{DATE}{fixed_operator}{TIME}"
