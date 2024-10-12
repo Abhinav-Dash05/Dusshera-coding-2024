@@ -27,7 +27,8 @@ def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def wait_and_clear():
-    time.sleep(1.5)  # Changed from 5 seconds to 1.5 seconds
+    time.sleep(1.5)  # Wait for 1.5 seconds
+    input("Press Enter to clear the window and show the menu...")
     clear_terminal()
 
 print("Do you want to load any previously stored lists")
@@ -85,14 +86,20 @@ while True:
         C2 = int(input())
         
         if C2 == 1:
-            for index, task in enumerate(HIGH_PRIORITY, start=1):
+            index = 1
+            for task in HIGH_PRIORITY:
                 print(f"{index}: {task}")
+                index += 1
         elif C2 == 2:
-            for index, task in enumerate(LOW_PRIORITY, start=1):
+            index = 1
+            for task in LOW_PRIORITY:
                 print(f"{index}: {task}")
+                index += 1
         elif C2 == 3:
-            for index, task in enumerate(TOTAL, start=1):
+            index = 1
+            for task in TOTAL:
                 print(f"{index}: {task}")
+                index += 1
         else:
             print("Not a valid Command.")
         print("---------------------------------------------------------------------------------------------")
@@ -106,8 +113,10 @@ while True:
         C3 = int(input())
         
         if C3 == 1:
-            for index, task in enumerate(HIGH_PRIORITY, start=1):
+            index = 1
+            for task in HIGH_PRIORITY:
                 print(f"{index}: {task}")
+                index += 1
             TASK_KILL = int(input("Press which task is to be removed by indicating its number: ")) - 1
             if TASK_KILL < 0 or TASK_KILL >= len(HIGH_PRIORITY):
                 print("Number beyond range.")
@@ -124,8 +133,10 @@ while True:
                 else:
                     print("Process Terminated")
         elif C3 == 2:
-            for index, task in enumerate(LOW_PRIORITY, start=1):
+            index = 1
+            for task in LOW_PRIORITY:
                 print(f"{index}: {task}")
+                index += 1
             TASK_KILL = int(input("Press which task is to be removed by indicating its number: ")) - 1
             if TASK_KILL < 0 or TASK_KILL >= len(LOW_PRIORITY):
                 print("Number beyond range.")
