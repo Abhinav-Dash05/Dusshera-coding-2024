@@ -27,7 +27,7 @@ def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def wait_and_clear():
-    time.sleep(5)  # Changed from 10 to 5 seconds
+    time.sleep(1.5)  # Changed from 5 seconds to 1.5 seconds
     clear_terminal()
 
 print("Do you want to load any previously stored lists")
