@@ -14,14 +14,14 @@ def load_credentials():
             for line in user_file:
                 USERID.append(line.strip())
     except FileNotFoundError:
-        print("No usernames file found. Starting with an empty list.")
+        print("No usernames file found. CREATE ONE NOWWWW!!!!!")
 
     try:
         with open('passwords.txt', 'r') as pass_file:
             for line in pass_file:
                 PASS.append(line.strip())
     except FileNotFoundError:
-        print("No passwords file found. Starting with an empty list.")
+        print("No passwords file found. CREATE ONE NOWWWW!!!!!")
 
 # Save usernames and passwords to files
 def save_credentials():
