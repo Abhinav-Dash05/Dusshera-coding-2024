@@ -7,6 +7,32 @@ import os
 USERID = []
 PASS = []
 
+def load_tasks_from_file():
+    try:
+        with open('list.txt', 'r') as file:
+            for line in file:
+                line = line.strip()
+                if line:
+                    parts = line.split(fixed_operator)
+                    if len(parts) == 3:
+                        task, date, time = parts
+                        TASK_DETAILS = f"{task}{fixed_operator}{date}{fixed_operator}{time}"
+                        TOTAL.append(TASK_DETAILS)
+                        HIGH_PRIORITY.append(TASK_DETAILS)
+                    else:
+                        print(f"Skipping invalid line: {line}")
+    except FileNotFoundError:
+        print("No saved file found. Starting with an empty list.")
+
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def wait_and_clear():
+    time.sleep(1.5)  # Wait for 1.5 seconds
+    input("Press Enter to clear the window and show the menu...")
+    clear_terminal()
+
+
 # Load usernames and passwords from files
 def load_credentials():
     try:
@@ -73,30 +99,6 @@ while True:
             LOW_PRIORITY = []
             fixed_operator = "|"
 
-            def load_tasks_from_file():
-                try:
-                    with open('list.txt', 'r') as file:
-                        for line in file:
-                            line = line.strip()
-                            if line:
-                                parts = line.split(fixed_operator)
-                                if len(parts) == 3:
-                                    task, date, time = parts
-                                    TASK_DETAILS = f"{task}{fixed_operator}{date}{fixed_operator}{time}"
-                                    TOTAL.append(TASK_DETAILS)
-                                    HIGH_PRIORITY.append(TASK_DETAILS)
-                                else:
-                                    print(f"Skipping invalid line: {line}")
-                except FileNotFoundError:
-                    print("No saved file found. Starting with an empty list.")
-
-            def clear_terminal():
-                os.system('cls' if os.name == 'nt' else 'clear')
-
-            def wait_and_clear():
-                time.sleep(1.5)  # Wait for 1.5 seconds
-                input("Press Enter to clear the window and show the menu...")
-                clear_terminal()
 
             print("Do you want to load any previously stored lists")
             print("Press 1 for yes")
