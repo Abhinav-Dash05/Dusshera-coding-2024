@@ -200,6 +200,7 @@ while True:
                     elif C2 == 3:
                         for i, task in enumerate(TOTAL, 1):
                             print(f"{i}: {task}")
+                    time.sleep(3.0)
                     os.system('cls' if os.name == 'nt' else 'clear')
 
                 elif user_input_1 == "3":
@@ -258,3 +259,6 @@ while True:
             print("SORRY! Credentials didn't match. Try to remember them again.")
             time.sleep(1.5)
             os.system('cls' if os.name == 'nt' else 'clear')
+
+    else:
+        print("COMMAND INVALID!!!!!!")
