@@ -1,2 +1,3 @@
 # Dusshera-coding-2024
  
+THIS IS A SMALL PROJECT DONE BY ME CUZ I WAS BORED.
