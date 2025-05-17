@@ -166,7 +166,7 @@ while True:
                 LOW_PRIORITY=[t for t in TOTAL if t.startswith("Low:")]
         except:
             print("Invalid input. Starting empty.")
-        clear_screen()
+        
         today=datetime.now().date()
         tomorrow=today+timedelta(days=1)
         due_today,due_tomorrow=[],[]
@@ -191,6 +191,8 @@ while True:
                 for t in due_tomorrow:
                     print(f"- {format_task_display(t)}")
         while True:
+            clear_screen()
+            print("\n=== TO-DO LIST ===")
             print("What would you like me to do?")
             print("\n1. Add task")
             print("2. Show tasks")
