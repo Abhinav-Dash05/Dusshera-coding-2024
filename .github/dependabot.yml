@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"  # Change if your requirements.txt is in a subfolder
+    schedule:
+      interval: "weekly"  # Options: "daily", "weekly", "monthly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+    rebase-strategy: "auto"
+    ignore:
+      - dependency-name: "cryptography"
+        versions: ["<41.0.0"]  # Example: ignore older versions if you need newer
+  - package-ecosystem: "github-actions"
+    directory: "/"  # For GitHub Actions workflows
+    schedule:
+      interval: "weekly"
