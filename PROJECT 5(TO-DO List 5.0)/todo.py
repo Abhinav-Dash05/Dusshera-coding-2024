@@ -92,6 +92,8 @@ def format_task_display(task):
         return f"{priority} {task_name} (Due {date_} {time_}) Status: {status_emoji}"
     except:
         return task
+def clear_screen():
+    os.system('cls' if os.name=='nt' else 'clear')
 hour=datetime.now().hour
 greeting="MORNING" if 4<=hour<12 else "AFTERNOON" if 12<=hour<17 else "EVENING"
 load_credentials()
@@ -164,6 +166,7 @@ while True:
                 LOW_PRIORITY=[t for t in TOTAL if t.startswith("Low:")]
         except:
             print("Invalid input. Starting empty.")
+        clear_screen()
         today=datetime.now().date()
         tomorrow=today+timedelta(days=1)
         due_today,due_tomorrow=[],[]
@@ -343,3 +346,4 @@ while True:
                     print(f"Error toggling task status: {e}")
             else:
                 print("Invalid command.")
+            clear_screen()
