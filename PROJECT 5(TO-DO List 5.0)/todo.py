@@ -348,4 +348,5 @@ while True:
                     print(f"Error toggling task status: {e}")
             else:
                 print("Invalid command.")
+            clear = input("Press Enter to clear screen.")
             clear_screen()
