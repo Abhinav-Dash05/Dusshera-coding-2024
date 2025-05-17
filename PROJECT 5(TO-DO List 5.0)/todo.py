@@ -23,12 +23,9 @@ CREDENTIALS={}
 def hash_password(pw):
     return hashlib.sha256(pw.encode()).hexdigest()
 def encrypt_username(username):
-    return cipher.encrypt(username.encode()).decode()
+    return hashlib.sha256(username.encode()).hexdigest()
 def decrypt_username(enc_username):
-    try:
-        return cipher.decrypt(enc_username.encode()).decode()
-    except:
-        return None
+    return None
 def save_credentials():
     with open(os.path.join(credentials_dir,'credentials.txt'),'w') as f:
         for enc_user,hashed in CREDENTIALS.items():
@@ -78,7 +75,7 @@ def valid_time(time_str):
         return True
     except:
         return False
-def date_split(task):
+def parse_task(task):
     try:
         priority,rest=task.split(': ',1)
         parts=rest.split('|')
@@ -89,8 +86,8 @@ def date_split(task):
         return None,[]
 def format_task_display(task):
     try:
-        priority,text=date_split(task)
-        task_name,date_,time_,status=text
+        priority,parts=parse_task(task)
+        task_name,date_,time_,status=parts
         status_emoji='✔' if status=='done' else '⏳'
         return f"{priority} {task_name} (Due {date_} {time_}) Status: {status_emoji}"
     except:
@@ -172,7 +169,7 @@ while True:
         due_today,due_tomorrow=[],[]
         for task in TOTAL:
             try:
-                _,parts=date_split(task)
+                _,parts=parse_task(task)
                 task_date=datetime.strptime(parts[1],"%Y-%m-%d").date()
                 if task_date==today:
                     due_today.append(task)
@@ -199,6 +196,7 @@ while True:
             print("5. Edit task")
             print("6. Pending tasks")
             print("7. Quit")
+            print("8. Toggle task status")
             cmd=input(": ").strip()
             if cmd=="1":
                 try:
@@ -305,8 +303,43 @@ while True:
                 save_tasks_to_file(user_file,TOTAL)
                 print("Tasks saved. Goodbye!")
                 quit()
+            elif cmd=="8":
+                print("1. High Priority\n2. Low Priority\n3. All Tasks")
+                try:
+                    toggle_list_choice=int(input("Choose list: "))
+                    if toggle_list_choice==1:
+                        task_list=HIGH_PRIORITY
+                    elif toggle_list_choice==2:
+                        task_list=LOW_PRIORITY
+                    elif toggle_list_choice==3:
+                        task_list=TOTAL
+                    else:
+                        print("Invalid choice.")
+                        continue
+                    if not task_list:
+                        print("No tasks in that list.")
+                        continue
+                    for i,task in enumerate(task_list,1):
+                        print(f"{i}. {format_task_display(task)}")
+                    idx=int(input("Enter task number to toggle status: "))-1
+                    if idx<0 or idx>=len(task_list):
+                        print("Invalid task number.")
+                        continue
+                    priority,parts=parse_task(task_list[idx])
+                    task_name,date_,time_,status=parts
+                    new_status='done' if status=='pending' else 'pending'
+                    new_task_str=f"{priority}: {task_name}|{date_}|{time_}|{new_status}"
+                    # Update all lists
+                    total_idx=TOTAL.index(task_list[idx])
+                    TOTAL[total_idx]=new_task_str
+                    if priority=="High":
+                        hp_idx=HIGH_PRIORITY.index(task_list[idx])
+                        HIGH_PRIORITY[hp_idx]=new_task_str
+                    else:
+                        lp_idx=LOW_PRIORITY.index(task_list[idx])
+                        LOW_PRIORITY[lp_idx]=new_task_str
+                    print(f"Task status toggled to '{new_status}'.")
+                except Exception as e:
+                    print(f"Error toggling task status: {e}")
             else:
                 print("Invalid command.")
-    else:
-        print("Invalid choice. Please try again.")
-        continue
