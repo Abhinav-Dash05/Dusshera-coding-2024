@@ -2,10 +2,16 @@ import os
 import time
 import hashlib
 import getpass
-from datetime import datetime
+from datetime import datetime, timedelta
 from cryptography.fernet import Fernet
 
-# Setup directories
+if os.name == 'nt':
+    os.system('cls')
+    print("\033[3J", end='')
+else:
+    os.system('clear')
+    print("\033[3J", end='')
+
 curr_dir = os.getcwd()
 app_data_dir = f'{curr_dir}/app-data/to-do'
 lists_dir = os.path.join(app_data_dir, 'lists')
@@ -13,7 +19,6 @@ credentials_dir = os.path.join(app_data_dir, 'credentials')
 os.makedirs(lists_dir, exist_ok=True)
 os.makedirs(credentials_dir, exist_ok=True)
 
-# Load or generate encryption key
 def load_or_generate_key():
     key_path = os.path.join(credentials_dir, 'key.key')
     if not os.path.exists(key_path):
@@ -27,7 +32,6 @@ def load_or_generate_key():
 
 cipher = Fernet(load_or_generate_key())
 
-# Credential store
 CREDENTIALS = {}
 
 def hash_password(password):
@@ -47,7 +51,6 @@ def load_credentials():
                     user, hashed = line.strip().split(":", 1)
                     CREDENTIALS[user] = hashed
 
-# Task functions
 def encrypt_data(data):
     return cipher.encrypt(data.encode())
 
@@ -68,14 +71,11 @@ def load_tasks_from_file(user_file):
 def get_user_file(username):
     return os.path.join(lists_dir, f"tasks_{username}.txt")
 
-# Greeting
 hour = datetime.now().hour
 greeting = "MORNING" if 4 <= hour < 12 else "AFTERNOON" if 12 <= hour < 17 else "EVENING"
 
-# Load stored credentials
 load_credentials()
 
-# === MAIN INTERFACE LOOP ===
 while True:
     print(f"\nGOOD {greeting} SIR. WHAT WOULD YOU LIKE ME TO DO.")
     print("1. Create a new account")
@@ -131,9 +131,8 @@ while True:
                         break
         else:
             print("Too many failed attempts.")
-            continue  # Return to main menu
+            continue
 
-        # Login successful
         user_file = get_user_file(username)
         TOTAL, HIGH_PRIORITY, LOW_PRIORITY = [], [], []
 
@@ -146,13 +145,41 @@ while True:
         except ValueError:
             print("Invalid input. Starting with an empty list.")
 
-        # === TASK MANAGEMENT LOOP ===
+        today = datetime.now().date()
+        tomorrow = today + timedelta(days=1)
+        due_today = []
+        due_tomorrow = []
+
+        for task in TOTAL:
+            try:
+                parts = task.split("|")
+                if len(parts) >= 3:
+                    task_date = datetime.strptime(parts[1], "%Y-%m-%d").date()
+                    if task_date == today:
+                        due_today.append(task)
+                    elif task_date == tomorrow:
+                        due_tomorrow.append(task)
+            except Exception:
+                continue
+
+        if due_today or due_tomorrow:
+            print("\n=== PENDING TASKS ===")
+            if due_today:
+                print("1. Tasks Due Today:")
+                for t in due_today:
+                    print(f"- {t}")
+            if due_tomorrow:
+                print("2. Tasks Due Tomorrow:")
+                for t in due_tomorrow:
+                    print(f"- {t}")
+
         while True:
             print("\n1. Add task")
             print("2. Show tasks")
             print("3. Delete task")
             print("4. Clear task list")
-            print("5. Quit")
+            print("5. Pending tasks")
+            print("6. Quit")
             cmd = input(": ").strip()
 
             if cmd == "1":
@@ -216,6 +243,20 @@ while True:
                     print("Invalid input.")
 
             elif cmd == "5":
+                if due_today or due_tomorrow:
+                    print("\n=== PENDING TASKS ===")
+                    if due_today:
+                        print("1. Tasks Due Today:")
+                        for t in due_today:
+                            print(f"- {t}")
+                    if due_tomorrow:
+                        print("2. Tasks Due Tomorrow:")
+                        for t in due_tomorrow:
+                            print(f"- {t}")
+                else:
+                    print("No pending tasks due today or tomorrow.")
+
+            elif cmd == "6":
                 save = input("Save before quitting? (y/n): ").strip().lower()
                 if save == 'y':
                     save_tasks_to_file(user_file, TOTAL)
