@@ -435,8 +435,7 @@ while True:
                     print("Task updated.")
                     log_event(f"Edited task: {edited_task}")
                 except Exception as e:
-                    log_event(f"Exception occurred in edit task: {str(e)}")
-                    print("An error occurred while editing the task.")
+                    continue
             elif cmd == "6":
                 pending_tasks=[t for t in TOTAL if t.endswith("pending")]
                 if not pending_tasks:
