@@ -167,6 +167,7 @@ def format_task_display(task):
     except:
         return task
 def clear_screen():
+    clear_cmd = input("PRESS ENTER TO CLEAR SCREEN")
     os.system('cls' if os.name=='nt' else 'clear')
 hour=datetime.now().hour
 greeting="MORNING" if 4<=hour<12 else "AFTERNOON" if 12<=hour<17 else "EVENING"
@@ -489,5 +490,4 @@ while True:
                     print(f"Error toggling task status: {e}")
             else:
                 print("Invalid command.")
-            clear_cmd = input("PRESS ENTER TO CLEAR CLEAR SCREEN")
             clear_screen()
