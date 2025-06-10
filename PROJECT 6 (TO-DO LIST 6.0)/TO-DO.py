@@ -11,15 +11,27 @@ def log_event(message):
     now = datetime.now()
     date_str = now.strftime("%Y-%m-%d")
     time_str = now.strftime("%H:%M:%S")
-    log_file_exists = os.path.exists(log_file_path)
     try:
+        os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
+        new_day=True
+        if os.path.exists(log_file_path):
+            try:
+                with open(log_file_path, 'r', encoding='utf-8') as f_check:
+                    if date_str in f_check.read():
+                        new_day=False
+            except Exception as e:
+                print(f"[LOG READ ERROR]{e}")
         with open(log_file_path, 'a', encoding='utf-8') as f:
-            if not log_file_exists or date_str not in open(log_file_path, encoding = 'utf-8').read():
-                f.write(f"\nDate-{date_str}\n")
-            f.write(f"{time_str}-{message}\n")
+            if new_day:
+                f.write(f'\nDate-{date_str}\n')
+            f.write(f'{time_str}-{message}\n')
+    except PermissionError:
+        print(f"\n[Security Warning] Permission denied: cannot write to log file at: \n {log_file_path}")
+        print("Please ensure the folder is not write-protected and that you have the permission.")
+        c = input("Press enter to quit: ")
+        quit()
     except Exception as e:
-        print(f"[Logging Error] {e}")
-        log_event(f"[Logging Error] {str(e)}", error = True)
+        print(f'[LOGGING ERROR]{e}')
 log_event('Program started and all necessary imports checked')
 lists_dir=os.path.join(app_data_dir,'lists')    # Lists folder directory
 def create_secure_folder(path):
