@@ -32,7 +32,7 @@ def create_secure_folder(path):
                 log_event(f"Secure Folder for {path} created.")
             except Exception as e:
                 print(f"Warning: Could not set perissions for {path}:{e}")
-                log_event(f"Failure in creating secure path for {path}:{str(e)}", error=True)
+                log_event(f"Failure in creating secure path for {path}:{str(e)}")
         elif system == 'Windows':
             try:
                 FILE_ATTRIBUTE_HIDDEN = 0x02
@@ -40,7 +40,7 @@ def create_secure_folder(path):
                 log_event(f"Secure Folder for {path} created.")
             except Exception as e:
                 print(f"Warning: Could not hide folder {path}: {e}")
-                log_event(f"Failure in creating secure path for {path}: {str(e)}", error=True)
+                log_event(f"Failure in creating secure path for {path}: {str(e)}")
 credentials_dir=os.path.join(app_data_dir,'credentials')        # LOGIN ID FOLDER
 create_secure_folder(app_data_dir)
 create_secure_folder(lists_dir)
@@ -54,7 +54,7 @@ def protect_folder(folder_path):
         log_event("Folders Protected.")
     except Exception as e:
         print(f"Warning: Could not protect {folder_path}: {e}")
-        log_event('[Security Error]: {str(e)}', error=True)
+        log_event('[Security Error]: {str(e)}')
 protect_folder(app_data_dir)
 protect_folder(credentials_dir)
 protect_folder(lists_dir)
@@ -200,7 +200,7 @@ while True:
             if verify_password(CREDENTIALS[enc_user], password):
                 if ph.check_needs_rehash(CREDENTIALS[enc_user]):
                     CREDENTIALS[enc_user] = hash_password(password)
-                    save_credentials
+                    save_credentials()
                     log_event(f'User logged in.')
                 break
             attempts+=1
@@ -422,7 +422,7 @@ while True:
                     print("Task updated.")
                     log_event(f"Edited task: {edited_task}")
                 except Exception as e:
-                    log_event(f"Exception occurred in edit task: {str(e)}", error=True)
+                    log_event(f"Exception occurred in edit task: {str(e)}")
                     print("An error occurred while editing the task.")
             elif cmd == "6":
                 pending_tasks=[t for t in TOTAL if t.endswith("pending")]
