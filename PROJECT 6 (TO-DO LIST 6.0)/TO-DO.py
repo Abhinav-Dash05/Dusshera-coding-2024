@@ -97,8 +97,6 @@ def verify_password(hashed_pw, plain_pw):
         return False
 def encrypt_username(username):                                 # Username Encryption
     return hashlib.sha256(username.encode()).hexdigest()
-def decrypt_username(enc_username):                             # Username Decryption
-    return None
 def save_credentials():                                                         # Saving of credetials in credentials folder
     with open(os.path.join(credentials_dir,'credentials.txt'),'w') as f:
         for enc_user,hashed in CREDENTIALS.items():
@@ -247,6 +245,8 @@ while True:
                 TOTAL=load_tasks_from_file(user_file)
                 HIGH_PRIORITY=[t for t in TOTAL if t.startswith("High:")]
                 LOW_PRIORITY=[t for t in TOTAL if t.startswith("Low:")]
+                if not TOTAL:
+                    print("[WARNING]NO TASKS LOADED. FILE MIGHT BE EMPTY OR CORRUPTED.")
         except:
             print("Invalid input. Starting empty.")
         
@@ -309,11 +309,9 @@ while True:
                     else:
                         LOW_PRIORITY.append(full_entry)
                     print("Task added.")
-                    print("A task was added")
-                    clear = input("Press Enter to clear screen.")
+                    log_event("A task was added")
                 except:
                     print("Invalid input.")
-                    clear = input("Press Enter to clear screen.")
             elif cmd=="2":
                 print("1. High Priority\n2. Low Priority\n3. All Tasks")
                 try:
@@ -325,11 +323,9 @@ while True:
                     for i,t in enumerate(task_list,1):
                         print(f"{i}. {format_task_display(t)}")
                         log_event("Tasks displayed")
-                    clear = input("Press Enter to clear screen.")
                 except:
                     print("Invalid input.")
                     log_event("Unable to display tasks")
-                    clear = input("Press Enter to clear screen.")
             elif cmd=="3":
                 print("1. High Priority\n2. Low Priority")
                 try:
@@ -359,10 +355,8 @@ while True:
                         cont=input("Delete another task from this list? (y/n): ").strip().lower()
                         if cont!="y":
                             break
-                    clear = input("Press Enter to clear screen.")
                 except:
                     print("Invalid input.")
-                    clear = input("Press Enter to clear screen.")
             elif cmd=="4":
                 print("1. Clear High Priority\n2. Clear Low Priority\n3. Clear All")
                 try:
@@ -389,10 +383,8 @@ while True:
                         log_event("All tasks were cleared for user.")
                     else:
                         print("Invalid choice.")
-                    clear = input("Press Enter to clear screen.")
                 except:
                     print("Invalid input.")
-                    clear = input("Press Enter to clear screen.")
             elif cmd == "5":
                 try:
                     print("1. High Priority\n2. Low Priority\n3. All Tasks")
@@ -441,11 +433,9 @@ while True:
                         LOW_PRIORITY[lp_idx] = edited_task
                     print("Task updated.")
                     log_event(f"Edited task: {edited_task}")
-                    clear = input("Press Enter to clear screen.")
                 except Exception as e:
                     log_event(f"Exception occurred in edit task: {str(e)}")
                     print("An error occurred while editing the task.")
-                    clear = input("Press Enter to clear screen.")
             elif cmd == "6":
                 pending_tasks=[t for t in TOTAL if t.endswith("pending")]
                 if not pending_tasks:
@@ -454,12 +444,10 @@ while True:
                     for i,t in enumerate(pending_tasks, 1):
                         print(f'{i}. {format_task_display(t)}')
                 log_event("Pending tasks enumerated for user.")
-                clear = input("Press Enter to clear screen.")
             elif cmd=="7":
                 save_tasks_to_file(user_file,TOTAL)
                 print("Tasks saved. Goodbye!")
                 log_event("User logged out and data saved.")
-                clear = input("Press Enter to QUIT.")
                 quit()
             elif cmd=="8":
                 print("1. High Priority\n2. Low Priority\n3. All Tasks")
@@ -497,10 +485,9 @@ while True:
                         lp_idx=LOW_PRIORITY.index(task_list[idx])
                         LOW_PRIORITY[lp_idx]=new_task_str
                     print(f"Task status toggled to '{new_status}'.")
-                    clear = input("Press Enter to clear screen.")
                 except Exception as e:
                     print(f"Error toggling task status: {e}")
-                    clear = input("Press Enter to clear screen.")
             else:
                 print("Invalid command.")
+            clear_cmd = input("PRESS ENTER TO CLEAR CLEAR SCREEN")
             clear_screen()
